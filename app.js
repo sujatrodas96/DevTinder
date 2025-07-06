@@ -6,14 +6,16 @@ const cors = require("cors");
 const connection = require("./DB/conn.js");
 const cookieParser = require("cookie-parser");
 
-const userRouter = require("./Routes/UserRoute.js"); 
+const authrouter = require("./Routes/auth.js");
+const profilerouter = require("./Routes/profilerouter.js");
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 
 app.use(express.urlencoded({ extended: false }));
-app.use("/api/user", userRouter); 
-
+app.use("/auth/user", authrouter); 
+app.use("/user/profile", profilerouter); 
 
 app.use("/uploads", express.static("uploads"));
 

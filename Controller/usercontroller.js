@@ -1,3 +1,4 @@
+require('dotenv').config();
 const UserModel = require("../Model/User.js");
 const multer = require("multer");
 const path = require("path");
@@ -5,7 +6,6 @@ const {validatesignupdata} = require("../utils/validation.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-require('dotenv').config();
 
 const createuser = async (req, res) => {
     try {
@@ -13,7 +13,7 @@ const createuser = async (req, res) => {
             validatesignupdata(req);
 
         //Encrypt Password----
-        const { firstname, lastname, email, password, gender} = req.body;
+        const { firstname, lastname, email, password, about, age, gender} = req.body;
         const saltround = 10;
         const hashpassword = await bcrypt.hash(password, saltround);
         
@@ -28,7 +28,9 @@ const createuser = async (req, res) => {
             firstname, 
             lastname, 
             email, 
-            password:hashpassword, 
+            password:hashpassword,
+            about,
+            age, 
             gender,
             profile,
             createdat
@@ -53,10 +55,9 @@ const loginuser = async (req,res) => {
         if(!user){
             return res.status(404).json({ error: "Invalid Credentials" });
         }
-        const ispasswordvalid = await bcrypt.compare(password, user.password);
+        const ispasswordvalid = await user.verifypassword(password);
         if(ispasswordvalid){
-            const token = await jwt.sign({_id: user._id}, process.env.TOKEN, {expiresIn: "1h" });
-            console.log(token);
+            const token = await user.getJWT();
             res.cookie('token', token, 
                 {
                     expires: new Date(Date.now() + 8 * 3600000)
@@ -71,18 +72,12 @@ const loginuser = async (req,res) => {
     }
 }
 
-const userprofile = async (req,res) => {
-    try {
-        const userprofiledata = req.user;
-            if(!userprofiledata){
-                res.status(404).json({message:"No Profile Found"});
-            }else{ 
-                res.status(201).json({data:userprofiledata});
-            } 
-        } catch (error) {
-            console.error("Error creating user:", error);
-            return res.status(500).json({ message: "Server Error", error: error.message });
-        }
+const logoutuser = async (req,res) => {
+    res.cookie('token', null, 
+    {
+        expires: new Date(Date.now()),
+    });
+    res.status(201).json({message:"Logout Succesfully"})
 }
 
-module.exports = {createuser, loginuser, userprofile};
+module.exports = {createuser, loginuser, logoutuser};
