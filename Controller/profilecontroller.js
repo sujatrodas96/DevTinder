@@ -25,7 +25,7 @@ const userprofileedit = async (req,res) => {
         const loggedinuser = req.user;
         Object.keys(req.body).forEach((key) => (loggedinuser[key] = req.body[key]));
         await loggedinuser.save();
-        return res.status(201).json({message: `${loggedinuser.firstname} your profile has been updated succesfully`});
+        return res.status(201).json({message: `${loggedinuser.firstname} your profile has been updated succesfully`, data:loggedinuser});
     } catch (error) {
         console.error("Error creating user:", error);
         return res.status(500).json({ message: "Server Error", error: error.message });
