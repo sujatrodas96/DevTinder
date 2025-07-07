@@ -4,8 +4,9 @@ const app = express();
 const port = process.env.PORT || 1010;
 const cors = require("cors");
 const connection = require("./DB/conn.js");
-const cookieParser = require("cookie-parser");
+const redisClient = require("./DB/redisclient.js");
 
+const cookieParser = require("cookie-parser");
 const authrouter = require("./Routes/auth.js");
 const profilerouter = require("./Routes/profilerouter.js");
 
