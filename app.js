@@ -9,6 +9,7 @@ const redisClient = require("./DB/redisclient.js");
 const cookieParser = require("cookie-parser");
 const authrouter = require("./Routes/auth.js");
 const profilerouter = require("./Routes/profilerouter.js");
+const requestconnectionrouter = require("./Routes/requestconnection.js");
 
 app.use(express.json());
 app.use(cookieParser());
@@ -16,7 +17,8 @@ app.use(cors());
 
 app.use(express.urlencoded({ extended: false }));
 app.use("/auth/user", authrouter); 
-app.use("/user/profile", profilerouter); 
+app.use("/user/profile", profilerouter);
+app.use("/request/send", requestconnectionrouter); 
 
 app.use("/uploads", express.static("uploads"));
 
