@@ -46,6 +46,7 @@ const User = new mongoose.Schema({
         default:Date.now
     }
 })
+User.index({firstname: 1, lastname: 1});
 
 User.methods.getJWT = async function () {
     const user = this;
