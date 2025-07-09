@@ -36,7 +36,9 @@ const requestconnection = async (req, res) => {
         })
 
         const data = await newConnectonRequest.save();
-        return res.status(201).json({ message: "ConnectRequest Send Succesfully", data});
+        const firstnameofsendinguser = await data.populate('toUserId', 'firstname');
+        return res.status(201).json({message: `${req.user.firstname} is ${status} in ${firstnameofsendinguser.toUserId.firstname}`, data });
+
     } catch (error) {
         console.error("Error creating user:", error);
         return res.status(500).json({ message: "Server Error", error: error.message });
