@@ -11,16 +11,19 @@ const authrouter = require("./Routes/auth.js");
 const profilerouter = require("./Routes/profilerouter.js");
 const requestconnectionrouter = require("./Routes/requestconnection.js");
 const reviewconnectionrouter = require("./Routes/reviewconnectrouter.js");
+const feedrouter = require("./Routes/feedrouter.js");
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 
 app.use(express.urlencoded({ extended: false }));
+
 app.use("/auth/user", authrouter); 
 app.use("/user/profile", profilerouter);
 app.use("/request/send", requestconnectionrouter);
 app.use("/request/review", reviewconnectionrouter);
+app.use("/", feedrouter);
 
 app.use("/uploads", express.static("uploads"));
 
